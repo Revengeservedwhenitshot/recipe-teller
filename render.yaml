@@ -2,11 +2,15 @@ services:
   - type: web
     name: recipe-teller
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn recipe_teller.wsgi:application
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn recipe_teller.recipe_teller.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: PYTHONPATH
+        value: /opt/render/project/src
       - key: SECRET_KEY
         fromDatabase: false
       - key: YOUTUBE_API_KEY
