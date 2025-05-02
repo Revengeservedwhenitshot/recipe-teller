@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipe Teller</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+
+<body>
+  <header>
+    <div class="logo">Recipe Teller</div>
+    <nav>
+      <ul>
+        <li><a href="{% url 'members' %}">Home</a></li>
+        <li><a href="{% url 'submit_recipe' %}">Submit a Recipe</a></li>
+        <li><a href="#recipes"><i class="fa-regular fa-bookmark"></i></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero hero2">
+    <h1>Share Your Food Recipes</h1>
+    <p>Learn. Cook. Share. Cooking Made Easy.</p>
+  </section>
+
+
+  <section id="submit" class="submit-recipe">
+    <h2>Submit Your Recipe</h2>
+    <br>
+    <form method="POST">
+      {% csrf_token %}
+      <p>
+        <label for="name">Recipe Name</label>
+        <p>{{ form.name }}</p>
+      </p>
+      <p>
+        <label for="ingredients">Ingredients</label>
+        <p>{{ form.ingredients }}</p>
+      </p>
+      <p>
+        <label for="instructions">Instructions</label>
+        <p>{{ form.instructions }}</p>
+      </p>
+      <p>
+        <label for="video_url">Video Url (optional)</label>
+        <p>{{ form.video_url }}</p>
+      </p>
+      
+      <button type="submit">Submit Recipe</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Recipe Teller. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>

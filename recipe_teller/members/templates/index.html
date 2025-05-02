@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Recipe Teller</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">Recipe Teller</div>
+    <nav>
+      <ul>
+        <li><a href="{% url 'members' %}">Home</a></li>
+        <li><a href="{% url 'submit_recipe' %}">Submit a Recipe</a></li>
+        <li><a href="{% url 'view_favourites' %}"><i class="fa-regular fa-bookmark"></i></a></li>
+      </ul>
+    </nav>
+  </header>
+  <section class="hero hero1">
+    <h1>Welcome to Recipe Teller</h1>
+    <p>Discover delicious recipes or share your own!</p>
+  </section>
+
+  <section id="recipes" class="recipes">
+    <h2>🔥 Trending Recipes</h2>
+    <div class="trending-recipes" id="trendingContainer">
+      <!-- Trending Recipes will be inserted via JS -->
+    </div>
+    <!-- Add more recipe-cards here if you want -->
+  </section>
+
+  <section id="submit" class="submit-recipe">
+    <h2>Search For Your Recipe</h2>
+    <form action="{% url 'recipe_teller' %}" method="get">
+      {% csrf_token %}
+      <label for="ingredients">Search Recipies For Available Ingredients (comma-separated):</label>
+      <input type="text" id="ingredients" name="ingredients" placeholder="e.g., tomato, cheese, basil"
+        value="{{ ingredients }}" required>
+      <button type="submit">Get Recipes</button>
+    </form>
+  </section>
+
+  <section class="display-recipe">
+    <div id="recipes">
+      {% if recipes %}
+      {% for recipe in recipes %}
+      <div class="recipe">
+        <h2>{{ recipe.name }}</h2>
+        <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
+        <p><strong>Instructions:</strong> {{ recipe.instructions }}</p>
+        <div class="video-container">
+          {% if recipe.video_url %}
+            <div class="video-wrapper">
+              <iframe 
+                width="560" 
+                height="315" 
+                src="https://www.youtube.com/embed/{{ recipe.video_url }}" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+              </iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v={{ recipe.video_url }}" 
+               target="_blank" 
+               class="video-link">
+              🎥 Watch on YouTube
+            </a>
+          {% else %}
+            <p style="color: orange;">No video available for this recipe</p>
+            <!-- Debug information -->
+            <p style="color: gray; font-size: 0.8em;">
+              Recipe: {{ recipe.name }}<br>
+              Video URL: {{ recipe.video_url|default:"None" }}
+            </p>
+          {% endif %}
+        </div>
+
+
+
+        {% if recipe.id %}
+        <form method="POST" action="{% url 'save_favourite' recipe.id %}">
+          {% csrf_token %}
+          <button type="submit">❤️ Save to Favourites</button>
+        </form>
+        {% else %}
+        <p style="color:red;">Recipe ID is missing.</p> <!-- Optional debug -->
+        {% endif %}
+
+
+      </div>
+      {% endfor %}
+      {% else %}
+      <span class="para-display-recipe">No recipes found. Try entering some ingredients above.</span>
+      {% endif %}
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Recipe Teller. All rights reserved.</p>
+  </footer>
+
+  <!-- JSON data as script tag -->
+  <script id="recipesData" type="application/json">
+  {{ trending_recipes_json|safe }}
+</script>
+
+  <!-- External JS -->
+  <script src="{% static 'script.js' %}"></script>
+</body>
+
+</html>

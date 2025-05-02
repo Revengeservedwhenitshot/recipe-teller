@@ -1,0 +1,8 @@
+<h2>Your Favourite Recipes</h2>
+<ul>
+  {% for fav in favourites %}
+    <li>{{ fav.recipe.name }}</li>
+  {% empty %}
+    <li>No favourite recipes saved yet.</li>
+  {% endfor %}
+</ul>
