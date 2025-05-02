@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: recipe-teller
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn recipe_teller.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        fromDatabase: false
+      - key: YOUTUBE_API_KEY
+        fromDatabase: false
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: recipe-teller.onrender.com
+      - key: DATABASE_URL
+        fromDatabase: true 

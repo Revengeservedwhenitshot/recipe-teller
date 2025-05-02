@@ -1,1 +1,0 @@
-web: gunicorn recipe_teller.wsgi --log-file - 
