@@ -5,7 +5,7 @@ services:
     buildCommand: |
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
-    startCommand: gunicorn recipe_teller.recipe_teller.wsgi:application
+    startCommand: gunicorn "recipe_teller.recipe_teller.wsgi:application"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
